@@ -1,10 +1,10 @@
 <?php
-// Detalhes da solicitação
 
-$protocolo = "000012";
-$doador = "Maria Oliveira";
-$tipoAcervo = "Item Único";
+$protocol = "000012";
+$donor = "Maria Oliveira";
+$collectionType = "Item Único";
 $status = "PENDENTE";
+
 ?>
 
 <!DOCTYPE html>
@@ -12,518 +12,551 @@ $status = "PENDENTE";
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+    <title>
+        Detalhes da Solicitação
+    </title>
 
-<title>Detalhes da Solicitação</title>
+    <style>
 
-<style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+        html,
+        body {
+            width: 100%;
+            min-height: 100%;
+            background-color: #ffffff;
+            font-family: Arial, Helvetica, sans-serif;
+        }
 
-body {
-    /* FUNDO CINZA REMOVIDO */
-    background-color: #ffffff;
+        body {
+            min-height: 100vh;
 
-    font-family: Arial, Helvetica, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-    min-height: 100vh;
+        .page {
+            width: 621px;
+            height: 512px;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+            background-color: #ffffff;
 
-.pagina {
-    width: 621px;
-    height: 512px;
+            display: flex;
+            flex-direction: column;
+        }
 
-    background-color: #ffffff;
+        header {
+            height: 45px;
 
-    display: flex;
-    flex-direction: column;
-}
+            border-bottom: 1px solid #bdbdbd;
 
-header {
-    height: 45px;
+            position: relative;
 
-    border-bottom: 1px solid #bdbdbd;
+            flex-shrink: 0;
+        }
 
-    position: relative;
+        .logo {
+            position: absolute;
 
-    display: flex;
-    align-items: center;
-}
+            left: 86px;
+            top: 12px;
 
-.logo {
-    position: absolute;
+            width: 41px;
+            height: 18px;
 
-    left: 86px;
+            border: 1px solid #bdbdbd;
 
-    width: 41px;
-    height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
-    border: 1px solid #bdbdbd;
+            font-size: 7px;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+            color: #555555;
+        }
 
-    font-size: 7px;
+        .header-title {
+            position: absolute;
 
-    color: #555;
-}
+            left: 138px;
+            top: 18px;
 
-.titulo-header {
-    position: absolute;
+            font-size: 8px;
+        }
 
-    left: 138px;
+        .curator {
+            position: absolute;
 
-    font-size: 8px;
-}
+            right: 86px;
+            top: 18px;
 
-.curador {
-    position: absolute;
+            font-size: 7px;
+        }
 
-    right: 86px;
+        main {
+            width: 449px;
 
-    font-size: 7px;
-}
+            margin: 0 auto;
 
-main {
-    width: 449px;
+            flex: 1;
 
-    margin: 0 auto;
+            padding-top: 19px;
 
-    flex: 1;
+            position: relative;
+        }
 
-    padding-top: 19px;
+        h1 {
+            font-size: 14px;
 
-    position: relative;
-}
+            margin-bottom: 4px;
+        }
 
-h1 {
-    font-size: 14px;
+        .date {
+            font-size: 6px;
 
-    margin-bottom: 4px;
-}
+            color: #aaaaaa;
 
-.data {
-    font-size: 6px;
+            margin-bottom: 17px;
+        }
 
-    color: #aaa;
+        .status {
+            position: absolute;
 
-    margin-bottom: 17px;
-}
+            right: 0;
+            top: 24px;
 
-.badge {
-    position: absolute;
+            height: 17px;
 
-    right: 0;
-    top: 24px;
+            padding: 0 7px;
 
-    border: 1px solid #999;
+            border: 1px solid #999999;
 
-    background-color: #fafafa;
+            background-color: #ffffff;
 
-    height: 17px;
+            display: flex;
+            align-items: center;
 
-    padding: 0 7px;
+            font-size: 7px;
+        }
 
-    font-size: 7px;
+        .grid {
+            display: grid;
 
-    display: flex;
+            grid-template-columns: 260px 174px;
 
-    align-items: center;
-}
+            gap: 16px;
+        }
 
-.grid {
-    display: grid;
+        h3 {
+            font-size: 6px;
 
-    grid-template-columns: 260px 174px;
+            color: #888888;
 
-    gap: 16px;
-}
+            letter-spacing: 1px;
 
-h3 {
-    font-size: 6px;
+            margin-bottom: 7px;
+        }
 
-    color: #888;
+        .box {
+            border: 1px solid #bbbbbb;
 
-    letter-spacing: 1px;
+            padding: 9px;
 
-    margin-bottom: 7px;
-}
+            margin-bottom: 14px;
 
-.box {
-    border: 1px solid #bbb;
+            font-size: 7px;
 
-    padding: 9px;
+            line-height: 11px;
+        }
 
-    margin-bottom: 14px;
+        .donor-data {
+            height: 76px;
+        }
 
-    font-size: 7px;
+        .item-data {
+            height: 109px;
+        }
 
-    line-height: 11px;
-}
+        .item-data p {
+            margin-bottom: 2px;
+        }
 
-.dados {
-    height: 76px;
-}
+        .photos {
+            display: grid;
 
-.item {
-    height: 109px;
-}
+            grid-template-columns: 1fr 1fr;
 
-.item p {
-    margin-bottom: 2px;
-}
+            gap: 7px;
+        }
 
-.fotos {
-    display: grid;
+        .photo {
+            height: 84px;
 
-    grid-template-columns: 1fr 1fr;
+            border: 1px solid #cccccc;
 
-    gap: 7px;
-}
+            background-color: #f5f5f5;
 
-.foto {
-    height: 84px;
+            display: flex;
 
-    border: 1px solid #ccc;
+            align-items: center;
+            justify-content: center;
 
-    background-color: #f5f5f9;
+            flex-direction: column;
 
-    display: flex;
+            color: #999999;
 
-    align-items: center;
+            font-size: 6px;
 
-    justify-content: center;
+            text-align: center;
+        }
 
-    color: #999;
+        .history {
+            margin-top: 2px;
+        }
 
-    font-size: 6px;
+        .history-box {
+            height: 41px;
 
-    text-align: center;
-}
+            border: 1px solid #bbbbbb;
 
-.historico {
-    margin-top: 2px;
-}
+            padding: 7px;
 
-.historico-box {
-    height: 41px;
+            font-size: 6px;
 
-    border: 1px solid #bbb;
+            line-height: 13px;
+        }
 
-    padding: 7px;
+        .actions {
+            display: flex;
 
-    font-size: 6px;
+            justify-content: space-between;
 
-    line-height: 13px;
-}
+            margin-top: 15px;
+        }
 
-.acoes {
-    display: flex;
+        .actions button {
+            height: 19px;
 
-    justify-content: space-between;
+            padding: 0 11px;
 
-    margin-top: 15px;
-}
+            border: 1px solid #999999;
 
-.acoes button {
-    height: 19px;
+            background-color: #ffffff;
 
-    padding: 0 11px;
+            font-size: 6px;
 
-    border: 1px solid #999;
+            font-weight: bold;
 
-    background-color: #fff;
+            cursor: pointer;
+        }
 
-    font-size: 6px;
+        .actions .approve {
+            background-color: #000000;
 
-    font-weight: bold;
+            color: #ffffff;
 
-    cursor: pointer;
-}
+            border-color: #000000;
+        }
 
-.acoes .aprovar {
-    background-color: #000;
+        footer {
+            height: 27px;
 
-    color: #fff;
+            border-top: 1px solid #bdbdbd;
 
-    border-color: #000;
-}
+            position: relative;
 
-footer {
-    height: 27px;
+            flex-shrink: 0;
 
-    border-top: 1px solid #bdbdbd;
+            display: flex;
+            align-items: center;
 
-    position: relative;
+            font-size: 7px;
 
-    display: flex;
+            color: #999999;
+        }
 
-    align-items: center;
+        .footer-museum {
+            position: absolute;
 
-    font-size: 7px;
+            left: 86px;
+        }
 
-    color: #999;
-}
+        .footer-system {
+            position: absolute;
 
-footer span:first-child {
-    position: absolute;
+            left: 300px;
+        }
 
-    left: 86px;
-}
+        .footer-logo {
+            position: absolute;
 
-footer span:nth-child(2) {
-    position: absolute;
+            right: 86px;
 
-    left: 300px;
-}
+            width: 41px;
+            height: 15px;
 
-.logo-footer {
-    position: absolute;
+            border: 1px solid #bdbdbd;
 
-    right: 86px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
-    width: 41px;
-    height: 15px;
+            font-size: 6px;
 
-    border: 1px solid #bdbdbd;
+            color: #555555;
+        }
 
-    display: flex;
+        @media (max-width: 650px) {
 
-    align-items: center;
+            .page {
+                width: 100%;
+                height: 100vh;
+            }
 
-    justify-content: center;
+            main {
+                width: 90%;
+            }
 
-    font-size: 6px;
+            .grid {
+                grid-template-columns: 1fr;
+            }
 
-    color: #555;
-}
+        }
 
-</style>
+    </style>
 
 </head>
 
 <body>
 
-<div class="pagina">
+<div class="page">
 
-<header>
+    <header>
 
-<div class="logo">
-[ LOGO ]
-</div>
+        <div class="logo">
+            [ LOGO ]
+        </div>
 
-<strong class="titulo-header">
-Painel de Curador • Solicitação #<?php echo $protocolo; ?>
-</strong>
+        <strong class="header-title">
+            Painel de Curador • Solicitação #<?php echo $protocol; ?>
+        </strong>
 
-<div class="curador">
-Curador: Dr. Ana Santos　♧
-</div>
+        <div class="curator">
+            Curador: Dr. Ana Santos
+        </div>
 
-</header>
+    </header>
 
 
-<main>
+    <main>
 
-<h1>
-Detalhes da Doação #<?php echo $protocolo; ?>
-</h1>
+        <h1>
+            Detalhes da Doação #<?php echo $protocol; ?>
+        </h1>
 
-<p class="data">
-Enviada em 15 de Março de 2025 às 14:32
-</p>
+        <p class="date">
+            Enviada em 15 de Março de 2025 às 14:32
+        </p>
 
 
-<div class="badge">
-STATUS <?php echo $status; ?>⌄
-</div>
+        <div class="status">
+            STATUS <?php echo $status; ?>⌄
+        </div>
 
 
-<div class="grid">
+        <div class="grid">
 
+            <section>
 
-<section>
+                <h3>
+                    DADOS DO DOADOR
+                </h3>
 
-<h3>
-DADOS DO DOADOR
-</h3>
+                <div class="box donor-data">
 
-<div class="box dados">
+                    <p>
+                        <b>Nome:</b>
+                        <?php echo $donor; ?>
+                    </p>
 
-<p>
-<b>Nome:</b>
-　<?php echo $doador; ?>
-</p>
+                    <p>
+                        <b>CPF:</b>
+                        123.456.789-00
+                    </p>
 
-<p>
-<b>CPF:</b>
-　123.456.789-00
-</p>
+                    <p>
+                        <b>Telefone:</b>
+                        (14) 99676-5432
+                    </p>
 
-<p>
-<b>Telefone:</b>
-　(14) 99676-5432
-</p>
+                    <p>
+                        <b>E-mail:</b>
+                        maria.oliveira@email.com
+                    </p>
 
-<p>
-<b>E-mail:</b>
-　maria.oliveira@email.com
-</p>
+                    <p>
+                        <b>Endereço:</b>
+                        Rua das Flores, 123 - Centro - Marília/SP
+                    </p>
 
-<p>
-<b>Endereço:</b>
-　Rua das Flores, 123 - Centro - Marília/SP
-</p>
+                </div>
 
-</div>
 
+                <h3>
+                    INFORMAÇÕES DO ITEM
+                </h3>
 
-<h3>
-INFORMAÇÕES DO ITEM
-</h3>
 
-<div class="box item">
+                <div class="box item-data">
 
-<b>TIPO DE ACERVO</b>
+                    <p>
+                        <b>TIPO DE ACERVO</b>
+                    </p>
 
-<p>
-<b><?php echo $tipoAcervo; ?></b>
-</p>
+                    <p>
+                        <b>
+                            <?php echo $collectionType; ?>
+                        </b>
+                    </p>
 
-<p>
-<b>HISTÓRICO E PROCEDÊNCIA:</b>
-</p>
+                    <p>
+                        <b>
+                            HISTÓRICO E PROCEDÊNCIA:
+                        </b>
+                    </p>
 
-<p>
-Fóssil encontrado em escavação na região de
-Marília em 1998, sob sedimentos da Formação
-Marília. Provável fragmento de carapaça de
-invertebrado.
-</p>
+                    <p>
+                        Fóssil encontrado em escavação na região
+                        de Marília em 1998, sob sedimentos da
+                        Formação Marília.
+                    </p>
 
-<p>
-Deseja contribuir para o acervo paleontológico
-do museu, cadastrando-se e enviando-o.
-</p>
+                    <p>
+                        Provável fragmento de carapaça de
+                        invertebrado.
+                    </p>
 
-</div>
+                </div>
 
-</section>
+            </section>
 
 
-<section>
+            <section>
 
-<h3>
-FOTOS DO ITEM
-</h3>
+                <h3>
+                    FOTOS DO ITEM
+                </h3>
 
-<div class="fotos">
 
-<div class="foto">
-▧<br>
-Foto 01
-</div>
+                <div class="photos">
 
-<div class="foto">
-▧<br>
-Foto 02
-</div>
+                    <div class="photo">
+                        ▧
+                        <br>
+                        Foto 01
+                    </div>
 
-<div class="foto">
-▧<br>
-Foto 03
-</div>
+                    <div class="photo">
+                        ▧
+                        <br>
+                        Foto 02
+                    </div>
 
-<div class="foto">
-▧<br>
-Foto 04
-</div>
+                    <div class="photo">
+                        ▧
+                        <br>
+                        Foto 03
+                    </div>
 
-<div class="foto">
-▧<br>
-Foto 05
-</div>
+                    <div class="photo">
+                        ▧
+                        <br>
+                        Foto 04
+                    </div>
 
-</div>
+                    <div class="photo">
+                        ▧
+                        <br>
+                        Foto 05
+                    </div>
 
-</section>
+                </div>
 
-</div>
+            </section>
 
+        </div>
 
-<section class="historico">
 
-<h3>
-HISTÓRICO DA SOLICITAÇÃO
-</h3>
+        <section class="history">
 
-<div class="historico-box">
+            <h3>
+                HISTÓRICO DA SOLICITAÇÃO
+            </h3>
 
-•　Solicitação recebida
-— 11/03/2025 às 14:32
+            <div class="history-box">
 
-<br>
+                • Solicitação recebida
+                — 11/03/2025 às 14:32
 
-•　Em análise pelo curador
-— 12/03/2025 às 10:15
+                <br>
 
-</div>
+                • Em análise pelo curador
+                — 12/03/2025 às 10:15
 
-</section>
+            </div>
 
+        </section>
 
-<div class="acoes">
 
-<button>
-VOLTAR
-</button>
+        <div class="actions">
 
-<button class="aprovar">
-APROVAR INCORPORAÇÃO
-</button>
+            <button>
+                VOLTAR
+            </button>
 
-<button>
-NÃO INCORPORAR
-</button>
+            <button class="approve">
+                APROVAR INCORPORAÇÃO
+            </button>
 
-<button>
-ENCAMINHAR
-</button>
+            <button>
+                NÃO INCORPORAR
+            </button>
 
-</div>
+            <button>
+                ENCAMINHAR
+            </button>
 
-</main>
+        </div>
 
+    </main>
 
-<footer>
 
-<span>
-Museu de Paleontologia de Marília
-</span>
+    <footer>
 
-<span>
-Sistema de Gestão de Acervo
-</span>
+        <span class="footer-museum">
+            Museu de Paleontologia de Marília
+        </span>
 
-<div class="logo-footer">
-[ LOGO ]
-</div>
+        <span class="footer-system">
+            Sistema de Gestão de Acervo
+        </span>
 
-</footer>
+        <div class="footer-logo">
+            [ LOGO ]
+        </div>
+
+    </footer>
 
 </div>
 
 </body>
+
 </html>
