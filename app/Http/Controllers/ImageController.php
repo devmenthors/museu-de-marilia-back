@@ -17,7 +17,7 @@ class ImageController extends Controller
     {
         try {
             $presignedUrl = $this->imageService->getRedirectUrlForImage($id);
-
+            
             return redirect()->away($presignedUrl);
         } catch (Exception $e) {
             dd($e->getMessage(), $e->getPrevious()?->getMessage());

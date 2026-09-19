@@ -19,7 +19,9 @@ class MinioImgRepo implements ImgRepoInterface {
             throw new Exception("Imagem não encontrada no bucket: {$id}");
         }
 
-        return Storage::disk($this->disk)->temporaryUrl(
+        // TODO: implementar rotas temporárias do Laravel
+        // para o usuário não ser redirecionado para o domínio do minIO
+        return Storage::disk($this->disk)->url(
             $id,
             now()->parse($expiration)
         );

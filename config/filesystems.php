@@ -58,7 +58,7 @@ return [
             'throw' => false,
             'report' => false,
         ],
-        
+
         'minio' => [
             'driver'                  => 's3',
             'key'                     => env('MINIO_ACCESS_KEY_ID'),
@@ -66,7 +66,7 @@ return [
             'region'                  => env('MINIO_DEFAULT_REGION', 'us-east-1'),
             'bucket'                  => env('MINIO_DEFAULT_BUCKET'),
             'endpoint'                => env('MINIO_ENDPOINT', 'http://minio:9000'),
-            // 'url'                     => env('MINIO_PUBLIC_URL', 'http://localhost:9000'),
+            'url'                     => env('MINIO_PUBLIC_URL', 'http://localhost:9000'),
             'use_path_style_endpoint' => env('MINIO_USE_PATH_STYLE_ENDPOINT', true),
             'throw'                   => true,
         ],
