@@ -7,7 +7,8 @@ use Exception;
 use Override;
 
 class MinioImgRepo implements ImgRepoInterface {
-    private string $disk = "minio";
+    private string $disk = "minio_public";
+    private string $private_disk = "minio_private";
 
     public function getApiUrl(string $id): string
     {
@@ -27,11 +28,11 @@ class MinioImgRepo implements ImgRepoInterface {
 
     public function getPresignedUrl(string $id, string $expiration = '+20 minutes'): string
     {
-        if (!$this->exists($id)) {
+        if (!$this->existsPrivate($id)) {
             throw new Exception("Imagem não encontrada no bucket: {$id}");
         }
 
-        return Storage::disk($this->disk)->temporaryUrl(
+        return Storage::disk($this->private_disk)->temporaryUrl(
             $id,
             now()->parse($expiration)
         );
@@ -40,5 +41,10 @@ class MinioImgRepo implements ImgRepoInterface {
     public function exists(string $id): bool
     {
         return Storage::disk($this->disk)->exists($id);
+    }
+
+    public function existsPrivate(string $id): bool
+    {
+        return Storage::disk($this->private_disk)->exists($id);
     }
 }
