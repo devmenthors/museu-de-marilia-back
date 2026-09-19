@@ -13,18 +13,18 @@ class ImageController extends Controller
         private readonly ImageService $imageService
     ) {}
 
-    public function show(string $id): RedirectResponse | JsonResponse
+    public function show(string $id, bool $isPublic = true): RedirectResponse | JsonResponse
     {
         try {
-            $presignedUrl = $this->imageService->getRedirectUrlForImage($id);
-            
+            $presignedUrl = $this->imageService->getRedirectUrlForImage($id, $isPublic);
+
             return redirect()->away($presignedUrl);
         } catch (Exception $e) {
-            dd($e->getMessage(), $e->getPrevious()?->getMessage());
-            // return response()->json([
-            //     'error' => $e->getMessage()
-            //     // 'error' => "Imagem não encontrada: {$id}"
-            // ], 404);
+            // dd($e->getMessage(), $e->getPrevious()?->getMessage());
+            return response()->json([
+                // 'error' => $e->getMessage()
+                'error' => "Imagem não encontrada: {$id}"
+            ], 404);
         }
     }
 }

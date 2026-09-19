@@ -13,8 +13,11 @@ class ImageService
     /**
      * Retorna a URL assinada do MinIO para a qual a API redirecionará o usuário.
      */
-    public function getRedirectUrlForImage(string $id): string
-    {
+    public function getRedirectUrlForImage(string $id, bool $isPublic): string
+    {   
+        if ($isPublic) {
+            return $this->imageRepository->getPresignedUrl($id);
+        }
         return $this->imageRepository->getPresignedUrl($id, '+15 minutes');
     }
 

@@ -4,6 +4,7 @@ namespace App\Repositories\Img;
 use App\Repositories\Img\ImgRepoInterface;
 use Illuminate\Support\Facades\Storage;
 use Exception;
+use Override;
 
 class MinioImgRepo implements ImgRepoInterface {
     private string $disk = "minio";
@@ -13,15 +14,24 @@ class MinioImgRepo implements ImgRepoInterface {
         return url("/data/img/{$id}");
     }
 
+    #[Override]
+    public function getPublicUrl(string $id)
+    {
+        if (!$this->exists($id)) {
+            throw new Exception("Imagem não encontrada no bucket: {$id}");
+        }
+        return Storage::disk($this->disk)->url(
+            $id
+        );
+    }
+
     public function getPresignedUrl(string $id, string $expiration = '+20 minutes'): string
     {
         if (!$this->exists($id)) {
             throw new Exception("Imagem não encontrada no bucket: {$id}");
         }
 
-        // TODO: implementar rotas temporárias do Laravel
-        // para o usuário não ser redirecionado para o domínio do minIO
-        return Storage::disk($this->disk)->url(
+        return Storage::disk($this->disk)->temporaryUrl(
             $id,
             now()->parse($expiration)
         );
