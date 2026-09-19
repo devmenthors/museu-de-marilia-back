@@ -1,0 +1,8 @@
+Services armazenam as regras de negócio, acessando os Repositories e Models para implementar métodos como:
+
+createUser
+deleteUser
+...
+
+Esses métodos são acessados pelos Controllers, ou seja, recebem dados das Requests
+

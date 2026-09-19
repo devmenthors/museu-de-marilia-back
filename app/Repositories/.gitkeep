@@ -1,0 +1,7 @@
+Os Repositories são responsáveis por isolar queries no banco de de dados
+
+Por exemplo, se a gente tem um UserModel, nós teríamos um UserRepository que implementa métodos como CRUD
+O ideal é que exista uma interface IUserRepository que determine os métodos que o UserRepository deve implementar.
+
+Com essa interface nós não importamos o UserRepository diretamente, mas sim a interface. Isso permite que nós tenhamos vários UserRepositories diferentes, por exemplo, para acessar usuários em banco diferentes.
+

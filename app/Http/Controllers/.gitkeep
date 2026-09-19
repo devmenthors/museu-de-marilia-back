@@ -1,0 +1,6 @@
+Aqui ficarão os Controllers dedicados a cada Model
+
+por exemplo, se a gente tem um UserModel, nós deveríamos ter um UserController também
+
+O papel do Controller é acessar o Service relacionado ao Model e implementar métodos que recebem um Request e retornam uma resposta da API
+
