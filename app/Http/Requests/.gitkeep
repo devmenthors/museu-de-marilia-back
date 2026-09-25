@@ -1,0 +1,6 @@
+Pasta dedicada à Requests
+
+basicamente aqui estarão tipos de Requests, por exemplo:
+se tivermos uma rota de UserLogin, nós teremos uma AuthLoginRequest que extende Request (ou FormRequest) do Laravel
+
+assim a gente teoricamente consegue validar as requests antes delas chegarem nos Controllers, etc
