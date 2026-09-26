@@ -11,14 +11,10 @@ return new class extends Migration
         Schema::create('cad_imagens', function (Blueprint $table) {
             $table->string('imagem_id', 45)->primary();
             $table->string('img_key', 512);
-            $table->unsignedBigInteger('protocolo_doacao');
+            $table->unsignedBigInteger('doacao_id');
 
-            // O diagrama mostra "2 more..." colunas escondidas nessa tabela
-            // que eu não consigo ler na imagem. Me diga quais são (tipo,
-            // tamanho, ordem de exibição etc.) que eu completo essa migration.
-
-            $table->foreign('protocolo_doacao')
-                ->references('protocolo_doacao')->on('doacoes')
+            $table->foreign('doacao_id')
+                ->references('id_doacao')->on('doacoes')
                 ->cascadeOnDelete();
         });
     }

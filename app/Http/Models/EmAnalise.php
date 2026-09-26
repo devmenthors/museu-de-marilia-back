@@ -12,7 +12,7 @@ class EmAnalise extends Model
     use HasFactory;
 
     protected $table = 'em_analises';
-    protected $primaryKey = 'protocolo_analise';
+    protected $primaryKey = 'id_analise';
     public $timestamps = false;
 
     protected $fillable = [
@@ -37,6 +37,6 @@ class EmAnalise extends Model
 
     public function fichasRegistroAcervo(): HasMany
     {
-        return $this->hasMany(FichaRegistroAcervo::class, 'protocolo_analise', 'protocolo_analise');
+        return $this->hasMany(FichaRegistroAcervo::class, 'id_analise', 'id_analise');
     }
 }

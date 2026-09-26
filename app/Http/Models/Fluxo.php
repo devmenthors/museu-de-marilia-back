@@ -15,18 +15,17 @@ class Fluxo extends Model
     protected $table = 'fluxos';
     protected $primaryKey = 'id_fluxo';
 
-    // A tabela usa data_criado/data_atualizado em vez de created_at/updated_at
     const CREATED_AT = 'data_criado';
     const UPDATED_AT = 'data_atualizado';
 
     protected $fillable = [
         'descricao',
-        'protocolo_doacao',
+        'doacao_id',
     ];
 
     public function doacao(): BelongsTo
     {
-        return $this->belongsTo(Doacao::class, 'protocolo_doacao', 'protocolo_doacao');
+        return $this->belongsTo(Doacao::class, 'doacao_id', 'id_doacao');
     }
 
     public function naoIncorporado(): HasOne

@@ -19,12 +19,11 @@ class CadImagem extends Model
     protected $fillable = [
         'imagem_id',
         'img_key',
-        'protocolo_doacao',
-        // adicione aqui os "2 more..." campos assim que você me disser quais são
+        'doacao_id',
     ];
 
     public function doacao(): BelongsTo
     {
-        return $this->belongsTo(Doacao::class, 'protocolo_doacao', 'protocolo_doacao');
+        return $this->belongsTo(Doacao::class, 'doacao_id', 'id_doacao');
     }
 }

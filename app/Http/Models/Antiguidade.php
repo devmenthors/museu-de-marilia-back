@@ -15,7 +15,7 @@ class Antiguidade extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'protocolo_antiguidade',
+        'ficha_acervo_id',
         'valor',
     ];
 
@@ -23,8 +23,8 @@ class Antiguidade extends Model
         'valor' => 'decimal:2',
     ];
 
-    public function fichaRegistroAcervo(): BelongsTo
+    public function fichaAcervo(): BelongsTo
     {
-        return $this->belongsTo(FichaRegistroAcervo::class, 'protocolo_antiguidade', 'protocolo_registro_acervo');
+        return $this->belongsTo(FichaRegistroAcervo::class, 'ficha_acervo_id', 'id_ficha_acervo');
     }
 }

@@ -8,8 +8,6 @@ return new class extends Migration
 {
     public function up(): void
     {
-        // Mesma observação da nao_incorporados: sem PK própria visível no
-        // diagrama, então id_fluxo virou PK+FK (relação 1:1 com Fluxos).
         Schema::create('encaminhados', function (Blueprint $table) {
             $table->unsignedBigInteger('id_fluxo')->primary();
             $table->dateTime('dt_encaminhado');

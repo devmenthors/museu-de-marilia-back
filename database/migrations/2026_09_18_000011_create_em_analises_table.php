@@ -9,7 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('em_analises', function (Blueprint $table) {
-            $table->id('protocolo_analise');
+            $table->id('id_analise');
             $table->text('parecer_tec')->nullable();
             $table->boolean('apto_incorporacao')->nullable();
             $table->boolean('apto_exposicao')->nullable();

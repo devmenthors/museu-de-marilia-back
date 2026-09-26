@@ -22,7 +22,6 @@ class Funcionario extends Model
         'timestamp',
     ];
 
-    // Nunca exponha o hash da senha em respostas JSON/API
     protected $hidden = [
         'senha',
     ];

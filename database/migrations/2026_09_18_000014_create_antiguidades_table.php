@@ -10,11 +10,11 @@ return new class extends Migration
     {
         Schema::create('antiguidades', function (Blueprint $table) {
             $table->id('antiguidade_id');
-            $table->unsignedBigInteger('protocolo_antiguidade')->nullable();
+            $table->unsignedBigInteger('ficha_acervo_id')->nullable();
             $table->decimal('valor', 10, 2);
 
-            $table->foreign('protocolo_antiguidade')
-                ->references('protocolo_registro_acervo')->on('fichas_de_registro_acervo')
+            $table->foreign('ficha_acervo_id')
+                ->references('id_ficha_acervo')->on('fichas_de_registro_acervo')
                 ->nullOnDelete();
         });
     }

@@ -1,5 +1,0 @@
-Modelos que representam "coisas do mundo real", por exemplo:
-
-UserModel: 
-    -> tem atributos como username, email, etc
-
