@@ -2,7 +2,8 @@
 
 namespace App\Providers;
 
-
+use App\Http\Repositories\IEnderecoRepo;
+use App\Http\Repositories\EnderecoRepo;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -12,7 +13,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(\App\Http\Repositories\IEnderecoRepo::class, \App\Http\Repositories\EnderecoRepo::class);
     }
 
     /**
