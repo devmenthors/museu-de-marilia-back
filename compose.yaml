@@ -48,53 +48,71 @@ services:
                 - '${DB_USERNAME}'
             retries: 3
             timeout: 5s
+    
     minio:
-        image: quay.io/minio/minio:latest
-        container_name: minio
-        ports:
-            - "9000:9000"   # Porta da API S3
-            - "9001:9001"   # Porta do Console Web
+        image: ${AISTOR_IMAGE:-quay.io/minio/aistor/minio:latest}
+        command: server /data --console-address ":9001" --license /minio.license
+        hostname: minio
         environment:
-            # FIXME: Mudar isso aqui
-            MINIO_ROOT_USER: minioadmin
-            MINIO_ROOT_PASSWORD: minioadmin
-        command: server /data --console-address ":9001"
+            MINIO_ROOT_USER: ${MINIO_ACCESS_KEY_ID:-minioadmin}
+            MINIO_ROOT_PASSWORD: ${MINIO_SECRET_ACCESS_KEY:-minioadmin}
+            MINIO_SERVER_URL: ${MINIO_ENDPOINT:-http://localhost:9000}
+            MINIO_BROWSER_REDIRECT_URL: ${MINIO_PUBLIC_URL:-http://localhost:9001}
+        ports:
+            - "${AISTOR_API_PORT:-9000}:9000"
+            - "${AISTOR_CONSOLE_PORT:-9001}:9001"
         volumes:
             - minio_data:/data
+            - ${AISTOR_LICENSE_FILE:-./license/minio.license}:/minio.license:ro
+        restart: unless-stopped
+        stop_grace_period: 2m
+        ulimits:
+            nofile:
+                soft: 1048576
+                hard: 1048576
+        security_opt:
+            - no-new-privileges:true
+        healthcheck:
+            test: ["CMD", "mc", "ready", "local"]
+            interval: 10s
+            timeout: 5s
+            retries: 12
+            start_period: 30s
         networks:
             - sail
-        healthcheck:
-            test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
-            interval: 5s
-            timeout: 5s
-            retries: 5
-            start_period: 5s
 
-    # Isso provavelmente não deve existir em produção
-    createbuckets:
-        image: quay.io/minio/mc
+    minio-init:
+        image: ${MC_IMAGE:-quay.io/minio/mc:latest}
         depends_on:
             minio:
                 condition: service_healthy
+        environment:
+            MINIO_ROOT_USER: ${MINIO_ACCESS_KEY_ID:-minioadmin}
+            MINIO_ROOT_PASSWORD: ${MINIO_SECRET_ACCESS_KEY:-minioadmin}
+            PRIVATE_BUCKET: ${MINIO_PRIVATE_BUCKET:-private}
+            PUBLIC_BUCKET: ${MINIO_PUBLIC_BUCKET:-public}
+        entrypoint: ["/bin/sh"]
+        command:
+            - -ec
+            - |
+                ACCESS_KEY="$$MINIO_ROOT_USER"
+                SECRET_KEY="$$MINIO_ROOT_PASSWORD"
+
+                until mc alias set aistor http://minio:9000 "$$ACCESS_KEY" "$$SECRET_KEY"; do
+                    echo "Waiting for AIStor to accept S3 credentials..."
+                    sleep 3
+                done
+
+                for bucket in "$$PRIVATE_BUCKET" "$$PUBLIC_BUCKET"; do
+                    mc mb --ignore-existing "aistor/$$bucket"
+                    mc version enable "aistor/$$bucket"
+                done
+
+                mc anonymous set public "aistor/$$PUBLIC_BUCKET";
+                mc admin info aistor
+        restart: "no"
         networks:
             - sail
-        environment:
-            MINIO_PUBLIC_BUCKET: '${MINIO_PUBLIC_BUCKET:-publico}'
-            MINIO_PRIVATE_BUCKET: '${MINIO_PRIVATE_BUCKET:-privado}'
-
-        entrypoint: >
-            /bin/sh -c "
-                until (/usr/bin/mc alias set minio http://minio:9000 minioadmin minioadmin); do
-                    echo 'Aguardando o MinIO inicializar...';
-                    sleep 2;
-                done;
-
-                /usr/bin/mc mb minio/$MINIO_PUBLIC_BUCKET;
-                /usr/bin/mc anonymous set public minio/$MINIO_PUBLIC_BUCKET;
-
-                /usr/bin/mc mb minio/$MINIO_PRIVATE_BUCKET;
-                exit 0;
-            "
 networks:
     sail:
         driver: bridge
