@@ -82,7 +82,7 @@ services:
             - sail
 
     minio-init:
-        image: ${MC_IMAGE:-quay.io/minio/mc:latest}
+        image: ${MC_IMAGE:-quay.io/minio/aistor/mc:latest}
         depends_on:
             minio:
                 condition: service_healthy

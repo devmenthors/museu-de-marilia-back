@@ -12,7 +12,7 @@ class Doacao extends Model
     use HasFactory;
 
     protected $table = 'doacoes';
-    protected $primaryKey = 'protocolo_doacao';
+    protected $primaryKey = 'id_doacao';
     public $timestamps = false;
 
     protected $fillable = [
@@ -42,18 +42,13 @@ class Doacao extends Model
         return $this->belongsTo(Doador::class, 'doador_cpf', 'cpf');
     }
 
-    public function status(): BelongsTo
-    {
-        return $this->belongsTo(Status::class, 'status_id', 'status_id');
-    }
-
     public function cadImagens(): HasMany
     {
-        return $this->hasMany(CadImagem::class, 'protocolo_doacao', 'protocolo_doacao');
+        return $this->hasMany(CadImagem::class, 'codigo_protocolo', 'codigo_protocolo');
     }
 
     public function fluxos(): HasMany
     {
-        return $this->hasMany(Fluxo::class, 'protocolo_doacao', 'protocolo_doacao');
+        return $this->hasMany(Fluxo::class, 'codigo_protocolo', 'codigo_protocolo');
     }
 }

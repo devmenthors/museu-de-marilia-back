@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Status extends Model
 {
@@ -18,8 +18,8 @@ class Status extends Model
         'nm_status',
     ];
 
-    public function doacoes(): HasMany
+    public function fluxos(): belongsToMany
     {
-        return $this->hasMany(Doacao::class, 'status_id', 'status_id');
+        return $this->belongsToMany(Fluxo::class, 'status_id', 'status_id');
     }
 }

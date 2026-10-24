@@ -21,12 +21,13 @@ class Fluxo extends Model
 
     protected $fillable = [
         'descricao',
-        'protocolo_doacao',
+        'codigo_protocolo',
+        'status_id'
     ];
 
     public function doacao(): BelongsTo
     {
-        return $this->belongsTo(Doacao::class, 'protocolo_doacao', 'protocolo_doacao');
+        return $this->belongsTo(Doacao::class, 'codigo_protocolo', 'codigo_protocolo');
     }
 
     public function naoIncorporado(): HasOne
@@ -42,5 +43,10 @@ class Fluxo extends Model
     public function emAnalises(): HasMany
     {
         return $this->hasMany(EmAnalise::class, 'id_fluxo', 'id_fluxo');
+    }
+
+    public function status() : BelongsTo
+    {
+        return $this->BelongsTo(Status::class, 'status_id', 'status_id');
     }
 }

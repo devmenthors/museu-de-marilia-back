@@ -4,7 +4,6 @@ namespace App\Repositories\Endereco;
 
 use App\Models\Endereco;
 use App\Repositories\Endereco\IEnderecoRepo;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
 
 class EnderecoRepo implements IEnderecoRepo
@@ -16,7 +15,7 @@ class EnderecoRepo implements IEnderecoRepo
 
     public function findEnderecoById(int $id): ?Endereco
     {
-        return Endereco::with('pessoas')->find($id);
+        return Endereco::find($id);
     }
 
     public function createEndereco(array $data): Endereco

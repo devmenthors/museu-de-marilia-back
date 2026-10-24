@@ -13,10 +13,15 @@ return new class extends Migration
             $table->text('descricao');
             $table->timestamp('data_criado')->useCurrent();
             $table->timestamp('data_atualizado')->useCurrent()->useCurrentOnUpdate();
-            $table->unsignedBigInteger('id_doacao')->nullable();
+            $table->string('codigo_protocolo')->nullable();
+            $table->unsignedBigInteger('status_id')->nullable();
 
-            $table->foreign('id_doacao')
-                ->references('id_doacao')->on('doacoes')
+            $table->foreign('status_id')
+                ->references('status_id')->on('status')
+                ->nullOnDelete();
+
+            $table->foreign('codigo_protocolo')
+                ->references('codigo_protocolo')->on('doacoes')
                 ->nullOnDelete();
         });
     }
