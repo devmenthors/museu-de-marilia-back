@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\EnderecoService;
-use Illuminate\Support\Facades\Http;
+use Exception;
 
 class EnderecoController extends Controller
 {
@@ -38,7 +38,7 @@ class EnderecoController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => "Erro: " . $e->getMessage()
-            ]);
+            ], 400);
         }
     }
 
@@ -54,27 +54,14 @@ class EnderecoController extends Controller
         ]);
 
         try {
-            $cepValidado = Http::get('https://viacep.com.br/ws/' . (string) $data['cep'] . '/json');
-            $response = $cepValidado->json();
-
-            if (isset($response['erro'])) {
-                return response()->json([
-                    'success' => false,
-                    'message' => "ERRO: CEP não existe!"
-                ]);
-            } else {
-                $endereco = $this->enderecoService->createEndereco($data);
-                return response()->json($endereco, 201);
-            }
+            $endereco = $this->enderecoService->createEndereco($data);
+            return response()->json($endereco, 201);
             
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json([
                 'success' => false,
-                'erro' => $e->getMessage()
-            ]);
+                'message' => "Erro: " . $e->getMessage()
+            ], 400);
         }
-
-        $endereco = $this->enderecoService->createEndereco($data);
-        return response()->json($endereco, 201);
     }
 }

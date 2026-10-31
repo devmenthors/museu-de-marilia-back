@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Funcionario;
 use App\Services\FuncionarioService;
+use Exception;
 use Illuminate\Http\Request;
 
 class FuncionarioController extends Controller
@@ -14,32 +15,55 @@ class FuncionarioController extends Controller
 
     public function createFuncionario(array $data)
     {
-        $funcionario = $this->funcionarioService->createFuncionario($data);
-        return response()->json([
-            'success' => true,
-        ]); 
+        try {
+            $funcionario = $this->funcionarioService->createFuncionario($data);
+            return response()->json([
+                'success' => true,
+            ]); 
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => "Erro: " . $e->getMessage()
+            ], 400);
+        }
     }
 
     public function getAllFuncionarios() {
-        return response()->json([
-            'success' => true,    
-            'funcionario' => $this->funcionarioService->getAllFuncionarios()]); 
+        try {
+            $funcionarios = $this->funcionarioService->getAllFuncionarios();
+            return response()->json([
+                'success' => true,    
+                'funcionarios' => $funcionarios
+            ]); 
+
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => "Erro: " . $e->getMessage()
+            ], 400);
+        }
     }
 
     public function findFuncionarioById(int $id) 
     {
-        $funcionario = $this->funcionarioService->findFuncionarioById($id);
-
-        if ($funcionario) {
-            return response()->json([
-                'success' => True,
-                'doador' => $funcionario
-            ]);
-        } else {
+        try {
+            $funcionario = $this->funcionarioService->findFuncionarioById($id);
+    
+            if ($funcionario) {
+                return response()->json([
+                    'success' => True,
+                    'doador' => $funcionario
+                ]);
+            } 
             return response()->json([
                 'success' => false,
                 'message' => "Erro: Funcionário não encontrado"
-            ]);
+            ], 404);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => "Erro: " . $e->getMessage()
+            ], 400);
         }
     }
 

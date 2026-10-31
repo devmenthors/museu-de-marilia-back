@@ -22,5 +22,4 @@ class EnderecoRepo implements IEnderecoRepo
     {
         return Endereco::create($data);
     }
-
 }

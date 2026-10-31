@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\DoadorService;
+use Exception;
 use Illuminate\Http\Request;
 
 class DoadorController extends Controller
@@ -13,7 +14,18 @@ class DoadorController extends Controller
     ) {}
 
     public function createDoador(array $data) {
-        $doador = $this->doadorService->createDoador($data);
+        try {
+            $doador = $this->doadorService->createDoador($data);
+            return response()->json([
+                'success' => true,
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => "Erro: " . $e->getMessage()
+            ], 400);
+        }
+        
     }
 
     public function findDoadorById(int $id) {
@@ -28,7 +40,7 @@ class DoadorController extends Controller
         return response()->json([
             'success' => false,
             'message' => "Erro: Doador não existe"
-        ]);
+        ], 404);
     }
 
     public function getAllDoadores() {

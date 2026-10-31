@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\FichaRegistroService;
 use Illuminate\Http\Request;
+use Exception;
 
 class FichaRegistroController extends Controller
 {
@@ -14,34 +15,54 @@ class FichaRegistroController extends Controller
 
     public function createFichaRegistro(array $data)
     {
-        $fichaCriada = $this->fichaRegistroService->createFichaRegistro($data);
-
-        return response()->json([
-            'success' => true,
-        ]);
+        try {
+            $fichaCriada = $this->fichaRegistroService->createFichaRegistro($data);
+            return response()->json([
+                'success' => true,
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => "Erro: " . $e->getMessage()
+            ], 400);
+        }
     }
 
     public function findFichaRegistroById(int $id) 
     {
-        $fichaRegistro = $this->fichaRegistroService->findFichaRegistroById($id);
-
-        if ($fichaRegistro) {
-            return response()->json([
-                'success' => true,
-                'fichaRegistro' => $fichaRegistro
-            ]);
-        } else {
+        try {
+            $fichaRegistro = $this->fichaRegistroService->findFichaRegistroById($id);
+            if ($fichaRegistro) {
+                return response()->json([
+                    'success' => true,
+                    'fichaRegistro' => $fichaRegistro
+                ]);
+            }
+            
             return response()->json([
                 'success' => false
-            ]);
+            ], 404);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => "Erro: " . $e->getMessage()
+            ], 400);
         }
     }
 
     public function getAllFichaRegistros()
     {
-        return response()->json([
-            'success' => true,
-            'fichasRegistro' => $this->fichaRegistroService->getAllFichaRegistros()
-        ]);
+        try {
+            $fichasRegistradas = $this->fichaRegistroService->getAllFichaRegistros();
+            return response()->json([
+                'success' => true,
+                'fichasRegistro' => $fichasRegistradas
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => "Erro: " . $e->getMessage()
+            ], 400);
+        }
     }
 }

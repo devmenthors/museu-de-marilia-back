@@ -28,8 +28,9 @@ class ImageController extends Controller
         } catch (Exception $e) {
             // dd($e->getMessage(), $e->getPrevious()?->getMessage());
             return response()->json([
+                'success' => false,
                 // 'error' => $e->getMessage()
-                'error' => "Imagem não encontrada: {$id}"
+                'message' => "Imagem não encontrada: {$id}"
             ], 404);
         }
     }
@@ -41,12 +42,18 @@ class ImageController extends Controller
             'is_private' => 'nullable|boolean',
         ]);
         
-        // TODO: proper error handling
-        $isPrivate = $request->boolean('is_private', false);
-        $data = $this->imageService->store($request->file("image"), $isPrivate);
-        return response()->json([
-            "message" => "Uploaded image successfully",
-            $data
-        ]);
+        try {
+            $isPrivate = $request->boolean('is_private', false);
+            $data = $this->imageService->store($request->file("image"), $isPrivate);
+            return response()->json([
+                "message" => "Uploaded image successfully",
+                $data
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => "Erro: " . $e->getMessage()
+            ], 400);
+        }
     }
 }
