@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/public/img/{id}', [ImageController::class, 'show'])->where('id', '.*');
 Route::get('/img/{id}', [ImageController::class, 'showPrivate'])->where('id', '.*');
-
+Route::post('/img/upload', [ImageController::class, 'store']);
 // TODO:
 // Route::get('/img/{id}', [ImageController::class, 'show'])->where('id', '.*');
 

@@ -10,4 +10,6 @@ interface ImgRepoInterface {
 
     public function exists(string $id): bool;
     public function existsPrivate(string $id): bool;
+
+    public function store(object $file, bool $isPrivate): array;
 }
