@@ -10,6 +10,14 @@ class MinioImgRepo implements ImgRepoInterface {
     private string $disk = "minio_public";
     private string $private_disk = "minio_private";
 
+    public function getUrl(string $id, bool $isPrivate, string $expiration = '+20 minutes') : string
+    {
+        if ($isPrivate) {
+            return $this->getPresignedUrl($id, $expiration);
+        }
+        return $this->getPublicUrl($id);
+    } 
+
     public function getApiUrl(string $id): string
     {
         return url("/data/img/{$id}");
@@ -46,5 +54,21 @@ class MinioImgRepo implements ImgRepoInterface {
     public function existsPrivate(string $id): bool
     {
         return Storage::disk($this->private_disk)->exists($id);
+    }
+
+
+    public function store(object $file, bool $isPrivate): array
+    {   
+        $disk = $isPrivate ? $this->private_disk : $this->disk;
+        $path = $file->store("/", $disk);
+
+        $url = $this->getUrl($path, $isPrivate);
+
+        return [
+            'path' => $path,
+            'url' => $url,
+            'is_private' => $isPrivate,
+            'disk' => $disk,
+        ];
     }
 }

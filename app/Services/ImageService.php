@@ -28,4 +28,9 @@ class ImageService
     {
         return $this->imageRepository->getApiUrl($id);
     }
+
+    public function store(object $file, bool $isPrivate): array
+    {
+        return $this->imageRepository->store($file, $isPrivate);
+    }
 }
