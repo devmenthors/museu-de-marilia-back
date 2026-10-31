@@ -20,7 +20,7 @@ class FuncionarioController extends Controller
             'pessoa.nome_pessoa' => ['required', 'string'],
             'pessoa.cpf' => ['required', 'string'],
             'pessoa.email' => ['required', 'string'],
-        
+
             'funcionario' => ['required', 'array'],
             'funcionario.senha' => ['required', 'string']
         ]);
@@ -30,7 +30,7 @@ class FuncionarioController extends Controller
             return response()->json([
                 'success' => true,
                 'funcionario' => $funcionario
-            ], 200); 
+            ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -40,13 +40,22 @@ class FuncionarioController extends Controller
     }
 
     public function getAllFuncionarios() {
-        return response()->json([
-            'success' => true,    
-            'funcionario' => $this->funcionarioService->getAllFuncionarios()
-        ], 200); 
+        try {
+            $funcionarios = $this->funcionarioService->getAllFuncionarios();
+            return response()->json([
+                'success' => true,
+                'funcionarios' => $funcionarios
+            ]);
+
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => "Erro: " . $e->getMessage()
+            ], 400);
+        }
     }
 
-    public function findFuncionarioById(int $id) 
+    public function findFuncionarioById(int $id)
     {
         try {
             $funcionario = $this->funcionarioService->findFuncionarioById($id);
@@ -82,7 +91,7 @@ class FuncionarioController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => "ERRO: " . $e->getMessage() 
+                'message' => "ERRO: " . $e->getMessage()
             ], 400);
         }
     }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\DoadorService;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -26,13 +27,13 @@ class DoadorController extends Controller
         ]);
 
         $validatedData['doador']['funcionario_id'] = 1; //Auth::id()
-        
+
         try {
         $doador = $this->doadorService->createDoador($validatedData);
             return response()->json([
                 'success' => true,
                 'doador_criado' => $doador
-            ], 200); 
+            ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
