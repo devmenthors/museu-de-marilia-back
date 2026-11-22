@@ -12,16 +12,10 @@ class EnderecoController extends Controller
     public function __construct(
         private readonly EnderecoService $enderecoService
     ) {}
-    
-    public function populateDatabase()
-    {
-        // Lógica para popular o banco de dados
 
-    }
-
-    public function findEnderecoById(int $id)
+    public function findEnderecoById(string $cpf, int $id)
     {
-        $endereco = $this->enderecoService->findEnderecoById($id);
+        $endereco = $this->enderecoService->findEnderecoById($cpf, $id);
         if ($endereco) {
             return response()->json($endereco);
         } else {
@@ -29,9 +23,9 @@ class EnderecoController extends Controller
         }
     }
 
-    public function getAllEnderecos() {
+    public function getAllEnderecos(string $cpf) { // mostra somente enderecos do doador do CPF X
         try {
-            $enderecos = $this->enderecoService->getAllEnderecos();
+            $enderecos = $this->enderecoService->getAllEnderecos($cpf);
             return response()->json($enderecos);
         }
         catch (\Exception $e) {
@@ -44,13 +38,14 @@ class EnderecoController extends Controller
 
     public function createEndereco(Request $request) {
         $data = $request->validate([
-            'logradouro' => ['required'],
-            'numero' => ['required'],
-            'bairro' => ['required'],
-            'cidade' => ['required'],
-            'estado' => ['required'],
+            'logradouro' => ['required', 'string'],
+            'numero' => ['required', 'integer'],
+            'bairro' => ['required', 'string'],
+            'cidade' => ['required', 'string'],
+            'estado' => ['required', 'string'],
             'cep' => ['required', 'max:8'],
-            'complemento' => ['nullable', 'string']
+            'complemento' => ['nullable', 'string'],
+            'doador_cpf' => ['required', 'integer'] // será transformado no id depois
         ]);
 
         try {

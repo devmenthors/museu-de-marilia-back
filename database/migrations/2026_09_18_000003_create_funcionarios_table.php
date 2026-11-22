@@ -9,12 +9,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('funcionarios', function (Blueprint $table) {
-            $table->string('pessoa_cpf', 11)->primary();
+            $table->id('funcionario_id');
+            $table->unsignedBigInteger('pessoa_id');
             $table->string('senha', 255); 
-            $table->timestamp('timestamp')->nullable();
+            $table->softDeletes();
 
-            $table->foreign('pessoa_cpf')
-                ->references('cpf')->on('pessoas')
+            $table->foreign('pessoa_id') /* puxa um email, cpf e nome_pessoa */
+                ->references('pessoa_id')->on('pessoas')
                 ->cascadeOnDelete();
         });
     }

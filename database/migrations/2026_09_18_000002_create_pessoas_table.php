@@ -10,14 +10,9 @@ return new class extends Migration
     {
         Schema::create('pessoas', function (Blueprint $table) {
             $table->id('pessoa_id');
-            $table->string('cpf', 11)->primary();
+            $table->string('cpf', 11)->unique();
             $table->string('nome_pessoa', 150);
             $table->string('email', 255);
-            $table->unsignedBigInteger('endereco_id')->nullable();
-
-            $table->foreign('endereco_id')
-                ->references('endereco_id')->on('enderecos')
-                ->nullOnDelete();
         });
     }
 

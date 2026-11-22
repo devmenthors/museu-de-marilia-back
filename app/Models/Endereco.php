@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Endereco extends Model
@@ -22,10 +23,11 @@ class Endereco extends Model
         'logradouro',
         'numero',
         'complemento',
+        'endereco_id'
     ];
 
-    public function pessoas(): HasMany
+    public function doadores(): BelongsToMany
     {
-        return $this->hasMany(Pessoa::class, 'endereco_id', 'endereco_id');
+        return $this->belongsToMany(Doador::class, 'endereco_id', 'endereco_id');
     }
 }

@@ -2,9 +2,6 @@
 
 namespace App\Providers;
 
-use App\Repositories\Doacao\DoacaoRepo;
-use App\Repositories\Doacao\IDoacaoRepo;
-
 // Doador
 use App\Repositories\Doador\DoadorRepo;
 use App\Repositories\Doador\IDoadorRepo;
@@ -13,13 +10,10 @@ use App\Repositories\Doador\IDoadorRepo;
 use App\Repositories\Endereco\EnderecoRepo;
 use App\Repositories\Endereco\IEnderecoRepo;
 
-// FichaRegistro
-use App\Repositories\FichaRegistro\FichaRegistroRepo;
-use App\Repositories\FichaRegistro\IFichaRegistroRepo;
+// FichaDoacao
+use App\Repositories\FichaDoacao\IFichaDoacaoRepo;
+use App\Repositories\FichaDoacao\FichaDoacaoRepo;
 
-// Fluxo
-use App\Repositories\Fluxo\FluxoRepo;
-use App\Repositories\Fluxo\IFluxoRepo;
 
 // Funcionario
 use App\Repositories\Funcionario\FuncionarioRepo;
@@ -28,6 +22,26 @@ use App\Repositories\Funcionario\IFuncionarioRepo;
 // Pessoa (talvez n precise)
 use App\Repositories\Pessoa\IPessoaRepo;
 use App\Repositories\Pessoa\PessoaRepo;
+
+// Descartado
+use App\Repositories\ReservaTecnica\IDescartadoRepo;
+use App\Repositories\Descartado\DescartadoRepo;
+
+// Em Analise
+use App\Repositories\ReservaTecnica\IEmAnaliseRepo;
+use App\Repositories\EmAnalise\EmAnaliseRepo;
+
+// Encaminhado
+use App\Repositories\ReservaTecnica\IEncaminhadoRepo;
+use App\Repositories\Encaminhado\EncaminhadoRepo;
+
+// Exposicoes
+use App\Repositories\ReservaTecnica\IExposicoesRepo;
+use App\Repositories\Exposicoes\ExposicoesRepo;
+
+// Reserva Tecnica
+use App\Repositories\ReservaTecnica\IReservaTecnicaRepo;
+use App\Repositories\ReservaTecnica\ReservaTecnicaRepo;
 
 // Provider
 use Illuminate\Support\ServiceProvider;
@@ -46,19 +60,28 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(IPessoaRepo::class, PessoaRepo::class);
 
         // Doação
-        $this->app->bind(IDoacaoRepo::class, DoacaoRepo::class);
+        $this->app->bind(IFichaDoacaoRepo::class, FichaDoacaoRepo::class);
 
         // Funcionario -> chama with('pessoas')
         $this->app->bind(IFuncionarioRepo::class, FuncionarioRepo::class);
 
         // Doador -> chama with('pessoas')
         $this->app->bind(IDoadorRepo::class, DoadorRepo::class);
-
-        // Ficha Registro
-        $this->app->bind(IFichaRegistroRepo::class, FichaRegistroRepo::class);
         
-        // Fluxo -> deve chamar with('status')
-        $this->app->bind(IFluxoRepo::class, FluxoRepo::class);
+        // Em Analise
+        $this->app->bind(IEmAnaliseRepo::class, EmAnaliseRepo::class);
+
+        // Reserva Tenica
+        $this->app->bind(IReservaTecnicaRepo::class, ReservaTecnicaRepo::class);
+
+        // Emprestado/Encaminhado
+        $this->app->bind(IEncaminhadoRepo::class, EncaminhadoRepo::class);
+
+        // Exposicoes
+        $this->app->bind(IExposicoesRepo::class, ExposicoesRepo::class);
+
+        // Descartado
+        $this->app->bind(IDescartadoRepo::class, DescartadoRepo::class);
     }
 
     /**

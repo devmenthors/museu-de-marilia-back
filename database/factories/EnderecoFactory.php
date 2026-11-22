@@ -2,7 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\Doador;
 use App\Models\Endereco;
+use App\Models\Pessoa;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -10,17 +12,21 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class EnderecoFactory extends Factory
 {
+    protected $model = Endereco::class;
+
     public function definition(): array
     {
-        $fakerBr = \Faker\Factory::create('pt_BR');
+        $fakerBr = fake('pt_BR');
+
         return [
-            'cep' => str_replace('-', '', $fakerBr->postcode),
-            'estado' => $fakerBr->state,
-            'cidade' => $fakerBr->city,
-            'bairro' => $fakerBr->text(15),
-            'logradouro' => $fakerBr->streetName,
-            'numero' => $this->faker->numberBetween(1, 250),
-            'complemento' => $this->faker->words(2, true),
+            'cep' => $fakerBr->numerify('########'),
+            'estado' => $fakerBr->stateAbbr(),
+            'cidade' => $fakerBr->city(),
+            'bairro' => $fakerBr->word(),
+            'logradouro' => $fakerBr->streetName(),
+            'numero' => $fakerBr->numberBetween(1, 2500),
+            'complemento' => $fakerBr->optional()->words(2, true),
+            'doador_id' => Doador::factory(),
         ];
     }
 }

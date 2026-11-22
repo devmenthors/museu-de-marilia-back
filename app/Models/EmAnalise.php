@@ -2,41 +2,29 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Observers\EmAnalisesObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
+#[ObservedBy([EmAnalisesObserver::class])]
 class EmAnalise extends Model
 {
-    use HasFactory;
-
     protected $table = 'em_analises';
-    protected $primaryKey = 'protocolo_analise';
+    protected $primaryKey = 'em_analise_id';
     public $timestamps = false;
 
     protected $fillable = [
         'parecer_tec',
-        'apto_incorporacao',
+        'apto_incorporado',
         'apto_exposicao',
         'obs_laudo',
         'aprovado',
-        'id_fluxo',
+        'ficha_doacao_id'
     ];
 
-    protected $casts = [
-        'apto_incorporacao' => 'boolean',
-        'apto_exposicao' => 'boolean',
-        'aprovado' => 'boolean',
-    ];
-
-    public function fluxo(): BelongsTo
+    public function ficha(): BelongsTo 
     {
-        return $this->belongsTo(Fluxo::class, 'id_fluxo', 'id_fluxo');
-    }
-
-    public function fichasRegistroAcervo(): HasMany
-    {
-        return $this->hasMany(FichaRegistroAcervo::class, 'protocolo_analise', 'protocolo_analise');
+        return $this->belongsTo(FichaDoacao::class, 'ficha_doacao_id', 'ficha_doacao_id');
     }
 }

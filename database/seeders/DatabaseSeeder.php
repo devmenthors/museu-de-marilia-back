@@ -2,35 +2,27 @@
 
 namespace Database\Seeders;
 
-use App\Models\Doacao;
+use App\Models\Doador;
 use App\Models\Endereco;
-use App\Models\Fluxo;
-use App\Models\Pessoa;
-use App\Models\Status;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\FichaDoacao;
+use App\Models\Funcionario;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
     public function run(): void
     {
 
-        /* CRIANDO STATUS PADRÃO */
-        Status::query()->create([ 'nm_status' => 'Em Análise' ]);
-        Status::query()->create([ 'nm_status' => 'Aguardando Documentação' ]);
-        Status::query()->create([ 'nm_status' => 'Aprovado para Incorporação' ]);
-        Status::query()->create([ 'nm_status' => 'Não Incorporado' ]);
-        Status::query()->create([ 'nm_status' => 'Encaminhado' ]);
+        Funcionario::factory(5)->create();
 
+        $doadores = Doador::factory(20)->create();
 
-        Endereco::factory()->count(20)->create();
-        Pessoa::factory()->count(10)->asDoador()->create();
-        Pessoa::factory()->count(5)->asFuncionario()->create();
-        Pessoa::factory()->create();
+        foreach ($doadores as $doador) {
+            Endereco::factory(rand(1, 3))->create([
+                'doador_id' => $doador->doador_id,
+            ]);
+        }
 
-        Doacao::factory(5)->create();
-        Fluxo::factory(3)->create();
-
+        FichaDoacao::factory(10)->create();
     }
 }
