@@ -4,19 +4,25 @@ namespace App\Repositories\Funcionario;
 
 use App\Models\Funcionario;
 use App\Repositories\Funcionario\IFuncionarioRepo;
+use Override;
 
 class FuncionarioRepo implements IFuncionarioRepo
 {
 
     public function createFuncionario(array $data): Funcionario
     {
-        // criar lógica de criar primeiro Pessoa, dps Funcionario q belongsTo Pessoa, talvez chamando um Repo aqui dentro? sla 
+        // criar lógica de criar primeiro Pessoa, dps Funcionario q belongsTo Pessoa, talvez chamando um Repo aqui dentro? sla
         return Funcionario::create($data);
     }
 
     public function findFuncionarioById(int $id): ?Funcionario
     {
         return Funcionario::with('pessoa')->where('funcionario_id', $id)->first();
+    }
+
+    public function findFuncionarioByEmail(string $email): ?Funcionario
+    {
+        return Funcionario::with('pessoa')->where('email', $email)->first();
     }
 
     public function getAllFuncionarios()

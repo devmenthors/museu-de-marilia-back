@@ -7,6 +7,7 @@ use App\Repositories\Doador\IDoadorRepo;
 use App\Repositories\Funcionario\IFuncionarioRepo;
 use App\Repositories\Pessoa\IPessoaRepo;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class FuncionarioService
 {
@@ -20,12 +21,12 @@ class FuncionarioService
     public function createFuncionario(array $data): Funcionario
     {
 
-        return DB::transaction(function () use ($data) { 
+        return DB::transaction(function () use ($data) {
             // se pessoa já existe não cria
             $pessoa = $this->pessoaRepo->findPessoaByCpf($data['pessoa']['cpf']);
 
             if (!$pessoa) {
-                $pessoa = $this->pessoaRepo->createPessoa($data['pessoa']);  
+                $pessoa = $this->pessoaRepo->createPessoa($data['pessoa']);
             } else {
                 $this->pessoaRepo->updatePessoa($pessoa->pessoa_id, $data['pessoa']);
             }
@@ -50,6 +51,11 @@ class FuncionarioService
         return $this->funcionarioRepo->findFuncionarioById($id);
     }
 
+    public function findFuncionarioByEmail(string $email): ?Funcionario
+    {
+        return $this->funcionarioRepo->findFuncionarioByEmail($email);
+    }
+
     public function getAllFuncionarios()
     {
         return $this->funcionarioRepo->getAllFuncionarios();
@@ -66,22 +72,37 @@ class FuncionarioService
         if (!empty($data['pessoa'])) {
             $this->pessoaRepo->updatePessoa($funcionario->pessoa_id, $data['pessoa']);
         }
-    
+
         if (!empty($data['funcionario'])) {
-            $this->funcionarioRepo->updateFuncionario($id, $data['funcionario']); 
+            $this->funcionarioRepo->updateFuncionario($id, $data['funcionario']);
         }
-        
+
         return $this->funcionarioRepo->findFuncionarioById($id);
     }
 
     public function deleteFuncionario(int $id): Funcionario
     {
         $funcionario = $this->funcionarioRepo->findFuncionarioById($id);
-        
+
         if (!$funcionario) {
             throw new \Exception('Funcionário não encontrado.');
         }
 
         return $this->funcionarioRepo->deleteFuncionario($id);
+    }
+
+    public function authFuncionario(string $email, string $password): array
+    {
+        $funcionario = $this->funcionarioRepo->findFuncionarioByEmail($email);
+        if (!$funcionario || !Hash::check($password, $funcionario->senha)) {
+            throw new \Exception("Credenciais inválidas");
+        }
+
+        $token = $funcionario->createToken('auth_token')->plainTextToken;
+        return [
+            'token' => $token,
+            'token_type' => 'Bearer',
+            'funcionario' => $funcionario
+        ];
     }
 }

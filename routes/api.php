@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FuncionarioAuthController;
 use App\Http\Controllers\DescartadoController;
 use App\Http\Controllers\DoadorController;
 use App\Http\Controllers\EmAnaliseController;
@@ -13,95 +14,104 @@ use App\Http\Controllers\ReservaTecnicaController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/public/img/{id}', [ImageController::class, 'show'])->where('id', '.*');
-Route::get('/img/{id}', [ImageController::class, 'showPrivate'])->where('id', '.*');
 Route::post('/img/upload', [ImageController::class, 'store']);
-// TODO:
-// Route::get('/img/{id}', [ImageController::class, 'show'])->where('id', '.*');
+
+// AUTH:
+Route::post('/login', [FuncionarioAuthController::class, 'login']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    // AUTH
+    Route::post('/logout', [FuncionarioAuthController::class, 'logout'])->name('logout');
+    Route::get('/me', [FuncionarioAuthController::class, 'me'])->name('me');
+
+    // IMAGE (private e upload)
+    Route::get('/img/{id}', [ImageController::class, 'showPrivate'])->where('id', '.*');
+    Route::post('/img/upload', [ImageController::class, 'store']);
+
+    // ENDEREÇOS CRUD
+    Route::prefix('enderecos')->name('enderecos.')->group(function () {
+        Route::post('/endereco/create', [EnderecoController::class, 'createEndereco'])->name('endereco_create');
+        Route::get('/endereco/{id}', [EnderecoController::class, 'findEnderecoById'])->name('endereco_get_id');
+        Route::get('/enderecos', [EnderecoController::class, 'getAllEnderecos'])->name('endereco_get');
+    });
+
+    // FUNCIONARIOS CRUD
+
+    Route::prefix('funcionarios')->name('funcionarios.')->group(function () {
+        Route::post('/', [FuncionarioController::class, 'createFuncionario'])->name('create');
+        Route::get('/{id}', [FuncionarioController::class, 'findFuncionarioById'])->name('get_id');
+        Route::get('/', [FuncionarioController::class, 'getAllFuncionarios'])->name('index');
+        Route::patch('/{id}', [FuncionarioController::class, 'updateFuncionario'])->name('update');
+        Route::delete('/{id}', [FuncionarioController::class, 'deleteFuncionario'])->name('delete');
+    });
+
+    // DOADORES
+
+    Route::prefix('doadores')->name('doadores.')->group(function () {
+        Route::post('/', [DoadorController::class, 'createDoador'])->name('create');
+        Route::get('/{id}', [DoadorController::class, 'findDoadorById'])->name('get_id');
+        Route::get('/', [DoadorController::class, 'getAllDoadores'])->name('index');
+        Route::patch('/{id}', [DoadorController::class, 'updateDoador'])->name('update');
+        Route::delete('/{id}', [DoadorController::class, 'deleteDoador'])->name('delete');
+    });
 
 
-// Endereços
-Route::prefix('enderecos')->name('enderecos.')->group(function () {
-    Route::post('/endereco/create', [EnderecoController::class, 'createEndereco'])->name('endereco_create');
-    Route::get('/endereco/{id}', [EnderecoController::class, 'findEnderecoById'])->name('endereco_get_id');
-    Route::get('/enderecos', [EnderecoController::class, 'getAllEnderecos'])->name('endereco_get');
-});
+    // FICHA DOACAO
+    Route::prefix('fichas')->name('fichas.')->group(function () {
+        Route::post('/', [FichaDoacaoController::class, 'createFichaDoacao'])->name('create');
+        Route::get('/{id}', [FichaDoacaoController::class, 'findFichaDoacaoById'])->name('get_id');
+        Route::get('/', [FichaDoacaoController::class, 'getAllFichas'])->name('index');
+        Route::patch('/{id}', [FichaDoacaoController::class, 'updateFichaDoacao'])->name('update');
+        Route::delete('/{id}', [FichaDoacaoController::class, 'deleteFichaDoacao'])->name('delete');
+    });
 
-// FUNCIONARIOS CRUD
+    // RESERVA TECNICA
 
-Route::prefix('funcionarios')->name('funcionarios.')->group(function () {
-    Route::post('/', [FuncionarioController::class, 'createFuncionario'])->name('create');
-    Route::get('/{id}', [FuncionarioController::class, 'findFuncionarioById'])->name('get_id');
-    Route::get('/', [FuncionarioController::class, 'getAllFuncionarios'])->name('index');
-    Route::patch('/{id}', [FuncionarioController::class, 'updateFuncionario'])->name('update');
-    Route::delete('/{id}', [FuncionarioController::class, 'deleteFuncionario'])->name('delete');
-});
+    Route::prefix('reservas')->name('reservas.')->group(function () {
+        Route::post('/', [ReservaTecnicaController::class, 'createReservaTecnica'])->name('create');
+        Route::get('/{id}', [ReservaTecnicaController::class, 'findReservaTecnicaById'])->name('get_id');
+        Route::get('/', [ReservaTecnicaController::class, 'getAllReservasTecnica'])->name('index');
+        Route::patch('/{id}', [ReservaTecnicaController::class, 'updateReservaTecnica'])->name('update');
+        Route::delete('/{id}', [ReservaTecnicaController::class, 'deleteReservaTecnica'])->name('delete');
+    });
 
-// DOADORES
+    // EM ANALISE
 
-Route::prefix('doadores')->name('doadores.')->group(function () {
-    Route::post('/', [DoadorController::class, 'createDoador'])->name('create');
-    Route::get('/{id}', [DoadorController::class, 'findDoadorById'])->name('get_id');
-    Route::get('/', [DoadorController::class, 'getAllDoadores'])->name('index');
-    Route::patch('/{id}', [DoadorController::class, 'updateDoador'])->name('update');
-    Route::delete('/{id}', [DoadorController::class, 'deleteDoador'])->name('delete');
-});
+    Route::prefix('emanalise')->name('emanalise.')->group(function () {
+        Route::post('/', [EmAnaliseController::class, 'createEmAnalise'])->name('create');
+        Route::get('/{id}', [EmAnaliseController::class, 'findEmAnaliseById'])->name('get_id');
+        Route::get('/', [EmAnaliseController::class, 'getAllEmAnalises'])->name('index');
+        Route::patch('/{id}', [EmAnaliseController::class, 'updateEmAnalise'])->name('update');
+        Route::delete('/{id}', [EmAnaliseController::class, 'deleteEmAnalise'])->name('delete');
+    });
 
+    // EXPOSICOES
 
-// FICHA DOACAO
-Route::prefix('fichas')->name('fichas.')->group(function () {
-    Route::post('/', [FichaDoacaoController::class, 'createFichaDoacao'])->name('create');
-    Route::get('/{id}', [FichaDoacaoController::class, 'findFichaDoacaoById'])->name('get_id');
-    Route::get('/', [FichaDoacaoController::class, 'getAllFichas'])->name('index');
-    Route::patch('/{id}', [FichaDoacaoController::class, 'updateFichaDoacao'])->name('update');
-    Route::delete('/{id}', [FichaDoacaoController::class, 'deleteFichaDoacao'])->name('delete');
-});
+    Route::prefix('exposicoes')->name('exposicoes.')->group(function () {
+        Route::post('/', [ExposicaoController::class, 'createExposicao'])->name('create');
+        Route::get('/{id}', [ExposicaoController::class, 'findExposicaoById'])->name('get_id');
+        Route::get('/', [ExposicaoController::class, 'getAllExposicoes'])->name('index');
+        Route::patch('/{id}', [ExposicaoController::class, 'updateExposicao'])->name('update');
+        Route::delete('/{id}', [ExposicaoController::class, 'deleteExposicao'])->name('delete');
+    });
 
-// RESERVA TECNICA
+    // DESCARTADOS
 
-Route::prefix('reservas')->name('reservas.')->group(function () {
-    Route::post('/', [ReservaTecnicaController::class, 'createReservaTecnica'])->name('create');
-    Route::get('/{id}', [ReservaTecnicaController::class, 'findReservaTecnicaById'])->name('get_id');
-    Route::get('/', [ReservaTecnicaController::class, 'getAllReservasTecnica'])->name('index');
-    Route::patch('/{id}', [ReservaTecnicaController::class, 'updateReservaTecnica'])->name('update');
-    Route::delete('/{id}', [ReservaTecnicaController::class, 'deleteReservaTecnica'])->name('delete');
-});
+    Route::prefix('descartados')->name('descartados.')->group(function () {
+        Route::post('/', [DescartadoController::class, 'createDescartado'])->name('create');
+        Route::get('/{id}', [DescartadoController::class, 'findDescartadoById'])->name('get_id');
+        Route::get('/', [DescartadoController::class, 'getAllDescartados'])->name('index');
+        Route::patch('/{id}', [DescartadoController::class, 'updateDescartado'])->name('update');
+        Route::delete('/{id}', [DescartadoController::class, 'deleteDescartado'])->name('delete');
+    });
 
-// EM ANALISE
+    // EMPRESTADOS
 
-Route::prefix('emanalise')->name('emanalise.')->group(function () {
-    Route::post('/', [EmAnaliseController::class, 'createEmAnalise'])->name('create');
-    Route::get('/{id}', [EmAnaliseController::class, 'findEmAnaliseById'])->name('get_id');
-    Route::get('/', [EmAnaliseController::class, 'getAllEmAnalises'])->name('index');
-    Route::patch('/{id}', [EmAnaliseController::class, 'updateEmAnalise'])->name('update');
-    Route::delete('/{id}', [EmAnaliseController::class, 'deleteEmAnalise'])->name('delete');
-});
-
-// EXPOSICOES
-
-Route::prefix('exposicoes')->name('exposicoes.')->group(function () {
-    Route::post('/', [ExposicaoController::class, 'createExposicao'])->name('create');
-    Route::get('/{id}', [ExposicaoController::class, 'findExposicaoById'])->name('get_id');
-    Route::get('/', [ExposicaoController::class, 'getAllExposicoes'])->name('index');
-    Route::patch('/{id}', [ExposicaoController::class, 'updateExposicao'])->name('update');
-    Route::delete('/{id}', [ExposicaoController::class, 'deleteExposicao'])->name('delete');
-});
-
-// DESCARTADOS 
-
-Route::prefix('descartados')->name('descartados.')->group(function () {
-    Route::post('/', [DescartadoController::class, 'createDescartado'])->name('create');
-    Route::get('/{id}', [DescartadoController::class, 'findDescartadoById'])->name('get_id');
-    Route::get('/', [DescartadoController::class, 'getAllDescartados'])->name('index');
-    Route::patch('/{id}', [DescartadoController::class, 'updateDescartado'])->name('update');
-    Route::delete('/{id}', [DescartadoController::class, 'deleteDescartado'])->name('delete');
-});
-
-// EMPRESTADOS
-
-Route::prefix('emprestados')->name('emprestados.')->group(function () {
-    Route::post('/', [EmprestadoController::class, 'createEmprestado'])->name('create');
-    Route::get('/{id}', [EmprestadoController::class, 'findEmprestadoById'])->name('get_id');
-    Route::get('/', [EmprestadoController::class, 'getAllEmprestados'])->name('index');
-    Route::patch('/{id}', [EmprestadoController::class, 'updateEmprestado'])->name('update');
-    Route::delete('/{id}', [EmprestadoController::class, 'deleteEmprestado'])->name('delete');
+    Route::prefix('emprestados')->name('emprestados.')->group(function () {
+        Route::post('/', [EmprestadoController::class, 'createEmprestado'])->name('create');
+        Route::get('/{id}', [EmprestadoController::class, 'findEmprestadoById'])->name('get_id');
+        Route::get('/', [EmprestadoController::class, 'getAllEmprestados'])->name('index');
+        Route::patch('/{id}', [EmprestadoController::class, 'updateEmprestado'])->name('update');
+        Route::delete('/{id}', [EmprestadoController::class, 'deleteEmprestado'])->name('delete');
+    });
 });

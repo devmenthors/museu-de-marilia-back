@@ -10,6 +10,8 @@ interface IFuncionarioRepo
 
     public function findFuncionarioById(int $id): ?Funcionario;
 
+    public function findFuncionarioByEmail(string $email): ?Funcionario;
+
     public function getAllFuncionarios();
 
     public function updateFuncionario(int $id, array $data): Funcionario;
