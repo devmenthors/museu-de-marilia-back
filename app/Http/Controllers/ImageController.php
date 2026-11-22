@@ -41,13 +41,14 @@ class ImageController extends Controller
             'image'      => 'required|image|mimes:jpeg,png,jpg,webp,gif|max:5120', // Máximo 5MB
             'is_private' => 'nullable|boolean',
         ]);
-        
+
         try {
             $isPrivate = $request->boolean('is_private', false);
             $data = $this->imageService->store($request->file("image"), $isPrivate);
             return response()->json([
                 "message" => "Uploaded image successfully",
-                $data
+                "url" => $data["url"],
+                "path" => $data["path"]
             ]);
         } catch (Exception $e) {
             return response()->json([
